@@ -5,7 +5,7 @@ use tar::Archive;
 use std::path::PathBuf;
 use std::path::Path;
 use mslnk::ShellLink;
-use std::process::{ Command, Stdio };
+use std::process::Command;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
