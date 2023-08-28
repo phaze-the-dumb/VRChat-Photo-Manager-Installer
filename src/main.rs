@@ -5,6 +5,7 @@ use tar::Archive;
 use std::path::PathBuf;
 use std::path::Path;
 use mslnk::ShellLink;
+use std::process::{ Command, Stdio };
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -87,5 +88,10 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
   }
 
   println!("Done! See you later!");
+
+  let mut cmd = Command::new("C:/Program Files/Phaze/VRChatPhotoManager/VRChat Photo Manager.exe");
+  cmd.current_dir("C:/Program Files/Phaze/VRChatPhotoManager/VRChat Photo Manager.exe");
+  cmd.spawn().expect("Cannot run VRChat Photo Manager.exe");
+
   Ok(())
 }
