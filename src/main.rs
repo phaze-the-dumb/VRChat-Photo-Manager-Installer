@@ -1,4 +1,4 @@
-use std::{ fs, time::Duration, process::Command };
+use std::{ fs, process::Command, thread, time::Duration };
 
 fn main() {
   let client = reqwest::blocking::Client::new();
@@ -8,7 +8,7 @@ fn main() {
     Ok(meta) => {
       if meta.is_file(){
         println!("Cannot launch app as the container path is a file not a directory");
-        loop{}
+        thread::sleep(Duration::from_secs(60));
       }
     },
     Err(_) => {
@@ -33,7 +33,7 @@ fn main() {
 
   if latest_file.status() != 200{
     println!("Failed to download file: {}", latest_file.status());
-    loop{}
+    thread::sleep(Duration::from_secs(60));
   }
 
   let latest_file = latest_file.bytes().unwrap();
