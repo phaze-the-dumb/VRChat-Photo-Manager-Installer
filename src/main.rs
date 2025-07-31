@@ -7,7 +7,8 @@ fn main() {
   match fs::metadata(&container_folder){
     Ok(meta) => {
       if meta.is_file(){
-        panic!("Cannot launch app as the container path is a file not a directory");
+        println!("Cannot launch app as the container path is a file not a directory");
+        loop{}
       }
     },
     Err(_) => {
@@ -23,12 +24,19 @@ fn main() {
   #[cfg(target_os = "windows")]
   let latest_file = client.get(format!("https://cdn.phaz.uk/vrcpm/builds/vrcpm-{}.exe", latest_version))
     .timeout(Duration::from_secs(120))
-    .send().unwrap().bytes().unwrap();
+    .send().unwrap();
 
   #[cfg(target_os = "linux")]
   let latest_file = client.get(format!("https://cdn.phaz.uk/vrcpm/builds/vrcpm-{}", latest_version))
     .timeout(Duration::from_secs(120))
-    .send().unwrap().bytes().unwrap();
+    .send().unwrap();
+
+  if latest_file.status() != 200{
+    println!("Failed to download file: {}", latest_file.status());
+    loop{}
+  }
+
+  let latest_file = latest_file.bytes().unwrap();
 
   #[cfg(target_os = "windows")]
   fs::write(container_folder.join("vrchat-photo-manager.exe"), latest_file).unwrap();
